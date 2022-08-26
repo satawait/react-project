@@ -15,18 +15,16 @@ const { Header, Sider } = Layout
 
 const MyLayout = () => {
   const { pathname } = useLocation()
-  const currentKey = useMemo(() => {
-    return pathname
-  }, [pathname])
-  const { userStore, loginStore } = useStore()
+  const { userStore, loginStore, channelStore } = useStore()
   const navigate = useNavigate()
   const onConfirm = () => {
     loginStore.logout()
-    navigate('/')
+    navigate('/login')
   }
   useEffect(() => {
     userStore.setUserInfo()
-  }, [userStore])
+    channelStore.loadChannelList()
+  }, [userStore, channelStore])
   const items = [
     {
       label: <Link to={'/'}>数据概览</Link>,
@@ -63,7 +61,8 @@ const MyLayout = () => {
             items={items}
             mode="inline"
             theme="dark"
-            defaultSelectedKeys={[currentKey]}
+            defaultSelectedKeys={[pathname]}
+            selectedKeys={[pathname]}
             style={{ height: '100%', borderRight: 0 }}
           >
           </Menu>
